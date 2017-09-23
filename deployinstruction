@@ -1,3 +1,4 @@
 - get node
 - get npm
 - npm install --production
+- create/merge database "bucketlistdb"
