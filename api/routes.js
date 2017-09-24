@@ -3,16 +3,21 @@ var router = express.Router();
 
 ctrl = require('./controllers');
 
-router
-	.route('/:usrid')
-	.get(ctrl.usrGet);
+router.
+	route('/newusr').
+	post(ctrl.usrNew);
 
-router
-	.route('/lists')
-	.get(ctrl.listsGetAll);
+router.
+	route('/:usrid').
+	get(ctrl.usrGet);
 
-router
-	.route('/lists/:listid')
-	.get(ctrl.listsGetOne);
+router.
+	route('/:usrid/lists').
+	get(ctrl.listGetAll).
+	post(ctrl.listAddOne);
+
+router.
+	route('/:usrid/lists/:listid').
+	get(ctrl.listGetOne);
 
 module.exports = router;
