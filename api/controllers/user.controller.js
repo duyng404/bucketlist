@@ -51,4 +51,46 @@ module.exports.usrNew = function(req,res){
 }
 
 module.exports.usrUpdate = function(req,res){
+	var usrid = req.params.usrid;
+	console.log('UPDATE usrid',usrid);
+
+	User.
+		findById(usrid).
+		select("-lists").
+		exec(function(err,doc) {
+			var response = {
+				status : 200,
+				message : doc
+			};
+			if (err){
+				console.log('Error finding user');
+				response.message = err;
+			} else if (!doc){
+				response.status = 404;
+				response.message = {
+					"message" : "User ID not found"
+				};
+			}
+			if (response.status != 200) {
+				res.
+					status(response.status).
+					message(response.message);
+			} else {
+				doc.username = req.body.username;
+				doc.email = req.body.email;
+				doc.save(function(err,updatedusr){
+					if (err){
+						console.log('Error updating user');
+						res.
+							status(500).
+							json(err);
+					} else {
+						console.log('Updated user',usrid)
+						res.
+							status(204).
+							json();
+					}
+				});
+			}
+		});
 }
