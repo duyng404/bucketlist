@@ -68,7 +68,10 @@ module.exports.listGetOne = function(req,res){
 
 	User.
 		findById(usrid).
-		populate('lists').
+		populate({
+			path : 'lists',
+			match : { _id : listid }
+		}).
 		exec(function (err,user){
 			var response={
 				status : 200,
@@ -81,17 +84,15 @@ module.exports.listGetOne = function(req,res){
 			} else if(!user) {
 				console.log('User id not found', usrid);
 				response.status = 404;
-				response.message = { "message":"User ID not found " + usrid };
+				response.message = { "message":"User ID not found"};
 			} else {
-				// Get the list
-				response.message = user.lists.filter(function(list){
-					return list._id == listid;
-				});
-				// If the list doesn't exist Mongoose returns null
-				if (!response.message){
+				// If the list doesn't exist the list is empty
+				if (user.lists.length==0){
 					response.status = 404;
-					response.message = { "message":"list ID not found " + listid };
-				}
+					response.message = { "message":"list ID not found"};
+				} else
+				// Get the list
+				response.message = user.lists[0];
 			}
 			res.
 				status(response.status).
@@ -101,7 +102,7 @@ module.exports.listGetOne = function(req,res){
 
 var _addList = function(req, res, user){
 	list = {
-		//_id : new mongoose.Types.ObjectId(),
+		_id : new mongoose.Types.ObjectId(),
 		name : req.body.name,
 		order : 0,
 		entries : [],
@@ -151,7 +152,7 @@ module.exports.listAddOne = function(req,res){
 			} else if (!user) {
 				console.log('User id not found',usrid);
 				response.status = 404;
-				response.message = { "message":"User ID not found " + usrid };
+				response.message = { "message":"User ID not found"};
 			}
 			if (user) {
 				_addList(req,res,user);
@@ -161,4 +162,7 @@ module.exports.listAddOne = function(req,res){
 					json(response.message);
 			}
 		});
+}
+
+module.exports.listUpdateOne = function(req,res){
 }

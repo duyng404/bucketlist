@@ -4,14 +4,17 @@ var router = express.Router();
 ctrlUser = require('./controllers/user.controller.js');
 ctrlList = require('./controllers/list.controller.js');
 
+// user routes
 router.
 	route('/newusr').
 	post(ctrlUser.usrNew);
 
 router.
 	route('/:usrid').
-	get(ctrlUser.usrGet);
+	get(ctrlUser.usrGet).
+	put(ctrlUser.usrUpdate);
 
+// list routes
 router.
 	route('/:usrid/lists').
 	get(ctrlList.listGetAll).
@@ -19,6 +22,7 @@ router.
 
 router.
 	route('/:usrid/lists/:listid').
-	get(ctrlList.listGetOne);
+	get(ctrlList.listGetOne).
+	put(ctrlList.listUpdateOne);
 
 module.exports = router;

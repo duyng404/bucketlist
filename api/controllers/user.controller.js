@@ -49,3 +49,6 @@ module.exports.usrNew = function(req,res){
 			}
 		});
 }
+
+module.exports.usrUpdate = function(req,res){
+}
