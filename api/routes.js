@@ -1,23 +1,24 @@
 var express = require('express');
 var router = express.Router();
 
-ctrl = require('./controllers');
+ctrlUser = require('./controllers/user.controller.js');
+ctrlList = require('./controllers/list.controller.js');
 
 router.
 	route('/newusr').
-	post(ctrl.usrNew);
+	post(ctrlUser.usrNew);
 
 router.
 	route('/:usrid').
-	get(ctrl.usrGet);
+	get(ctrlUser.usrGet);
 
 router.
 	route('/:usrid/lists').
-	get(ctrl.listGetAll).
-	post(ctrl.listAddOne);
+	get(ctrlList.listGetAll).
+	post(ctrlList.listAddOne);
 
 router.
 	route('/:usrid/lists/:listid').
-	get(ctrl.listGetOne);
+	get(ctrlList.listGetOne);
 
 module.exports = router;
