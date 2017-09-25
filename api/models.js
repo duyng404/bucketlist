@@ -23,7 +23,7 @@ var listSchema = new mongoose.Schema({
 		"default" : 0
 	},
 	entries : [entrySchema],
-	owner : { type : Schema.Types.ObjectId, ref: 'User' }
+	owner : [{ type : Schema.Types.ObjectId, ref: 'User' }]
 });
 
 var userSchema = new mongoose.Schema({

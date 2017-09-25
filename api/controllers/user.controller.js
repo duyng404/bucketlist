@@ -29,6 +29,24 @@ module.exports.usrGet = function(req,res){
 		});
 }
 
+module.exports.usrGetAll = function(req,res){
+	console.log('GET all and every users');
+	User.
+		find().
+		exec(function(err,listofuser){
+			if (err){
+				console('Error getting all the users');
+				res.
+					status(500).
+					json(err);
+			} else {
+				res.
+					status(200).
+					json(listofuser);
+			}
+		});
+}
+
 module.exports.usrNew = function(req,res){
 	User.
 		create({
@@ -92,5 +110,58 @@ module.exports.usrUpdate = function(req,res){
 					}
 				});
 			}
+		});
+}
+
+var _cleanOrphanedList = function(req,response){
+	List.
+		remove({ owner : [] }).
+		exec(function(err,doc){
+			if (err){
+				console.log('Error removing orphaned lists')
+				response.status = 500;
+				response.message = json(err);
+			}
+		});
+}
+
+module.exports.usrDelete = function(req,res) {
+	var usrid = req.params.usrid;
+	console.log('DELETE an user',usrid)
+
+	User.
+		findByIdAndRemove(usrid).
+		exec(function(err,user){
+			var response = {
+				status : 200,
+				message : {}
+			}
+			if (err){
+				console.log('Error deleting an user');
+				response.status = 404;
+				response.message = json(err);
+			} else {
+				// finding all other lists with that owner
+				List.
+					update(
+						{ owner : user._id },
+						{ $pullAll : { owner : [user._id] } },
+					function(err,doc){
+						if (err){
+							console.log('Error cleaning up lists\' owner');
+							response.status = 500;
+							response.message = json(err);
+						} else {
+							// deleted and cleaned up succesfully, let's continue
+							_cleanOrphanedList(req,response);
+							console.log('User deleted:',user);
+							response.status = 204;
+							response.message = {};
+						}
+					});
+			}
+			res.
+				status(response.status).
+				json(response.message);
 		});
 }

@@ -2,6 +2,25 @@ var mongoose = require('mongoose');
 var List = mongoose.model('List');
 var User = mongoose.model('User');
 
+module.exports.listGetEverything = function(req,res){
+	console.log('GET all and every lists there are');
+
+	List.
+		find().
+		exec(function(err,listoflist){
+			if (err){
+				console('Error getting all and every list');
+				res.
+					status(500).
+					json(err);
+			} else {
+				res.
+					status(200).
+					json(listoflist);
+			}
+		});
+}
+
 module.exports.listGetAll = function(req,res){
 	var usrid = req.params.usrid;
 	console.log('GET all the lists of usrid', usrid);
@@ -205,6 +224,43 @@ module.exports.listUpdateOne = function(req,res){
 							json();
 					}
 				});
+			}
+		});
+}
+
+module.exports.listDeleteOne = function(req,res){
+	var usrid = req.params.usrid;
+	var listid = req.params.listid;
+	console.log('DELETE list id', listid, 'of usrid', usrid);
+	//TODO: check if list is really owned by usr
+
+	List.
+		findByIdAndRemove(listid).
+		exec(function (err,doc){
+			if (err){
+				console.log('Error deleting a list');
+				res.
+					status(404).
+					json(err);
+			} else {
+				// remove the list from all the owners
+				User.
+					update(
+						{ _id : { $in : doc.owner } },
+						{ $pullAll : { lists : [doc._id] } },
+					function(err,doc){
+						if (err){
+							console.log('Error removing list from owners');
+							res.
+								status(500).
+								json(err);
+						} else {
+							console.log('List deleted:',doc);
+							res.
+								status(204).
+								json();
+						}
+					})
 			}
 		});
 }

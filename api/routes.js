@@ -12,7 +12,8 @@ router.
 router.
 	route('/:usrid').
 	get(ctrlUser.usrGet).
-	put(ctrlUser.usrUpdate);
+	put(ctrlUser.usrUpdate).
+	delete(ctrlUser.usrDelete);
 
 // list routes
 router.
@@ -23,6 +24,16 @@ router.
 router.
 	route('/:usrid/lists/:listid').
 	get(ctrlList.listGetOne).
-	put(ctrlList.listUpdateOne);
+	put(ctrlList.listUpdateOne).
+	delete(ctrlList.listDeleteOne);
+
+// debug routes
+router.
+	route('/debug/alllists').
+	get(ctrlList.listGetEverything);
+
+router.
+	route('/debug/alluser').
+	get(ctrlUser.usrGetAll);
 
 module.exports = router;
