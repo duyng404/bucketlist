@@ -69,7 +69,7 @@ module.exports.entryGetOne = function(req,res){
 		});
 }
 
-var _addEntry = function(req,response,list){
+var _addEntry = function(req,res,list){
 	list.entries.push({
 		_id : mongoose.Types.ObjectId(),
 		body : req.body.body,
@@ -79,11 +79,13 @@ var _addEntry = function(req,response,list){
 
 	list.save(function(err, listUpdated){
 		if (err){
-			response.status = 500;
-			response.message = json(err);
+			res.
+				status(500).
+				json(err);
 		} else {
-			response.status = 200;
-			response.message = listUpdated.entries[listUpdated.entries.length - 1];
+			res.
+				status(201).
+				json(listUpdated.entries[listUpdated.entries.length - 1]);
 		}
 	});
 }
@@ -109,12 +111,14 @@ module.exports.entryAddOne = function(req,res){
 				console.log('List id not found', usrid);
 				response.status = 404;
 				response.message = { "message":"List ID not found"};
-			} else {
-				_addEntry(req,response,doc);
 			}
-			res.
-				status(response.status).
-				json(response.message);
+			if (doc){
+				_addEntry(req,res,doc);
+			} else {
+				res.
+					status(response.status).
+					json(response.message);
+			}
 		});
 }
 

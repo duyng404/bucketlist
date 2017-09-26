@@ -129,6 +129,8 @@ var _addList = function(req, res, user){
 	List.create(list, function(err,doc){
 		if (err){
 			console.log('Error creating list');
+			console.log('req.body=',req.body);
+			console.log(err);
 			res.
 				status(400).
 				json(err);

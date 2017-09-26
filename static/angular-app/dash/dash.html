@@ -1,0 +1,29 @@
+<h1>Welcome, {{ vm.user.username }}!</h1>
+
+<p>Your email is: {{ vm.user.email }}</p>
+<p>Here are your lists:</p>
+
+<ul>
+	<li ng-repeat="list in vm.lists">
+		<button ng-click="vm.deleteList(list._id)">-</button>
+		{{ list.name }}
+		<ul>
+			<li ng-repeat="entry in list.entries">
+				<button ng-click="vm.deleteEntry(list._id,entry._id)">-</button>
+				{{ entry.body }}
+			</li>
+			<li>
+				<button ng-show="!vm.entryFormVisible[list._id]" ng-click="vm.entryFormVisible[list._id]=true">+</button>
+				<form ng-show="vm.entryFormVisible[list._id]" name="vm.entryForm[list._id]" ng-submit="vm.addEntry(list._id)">
+					<input type="text" name="body" required ng-model="vm.entryBodyField[list._id]" autocomplete="off">
+					<button ng-show="vm.entryForm[list._id].body.$dirty && vm.entryForm[list._id].body.$valid" type="submit">Add an entry</button>
+				</form>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+<form name="vm.listForm" ng-submit="vm.addList()">
+	Add a list: <input type="text" name="name" required ng-model="vm.name" autocomplete="off">
+	<button ng-show="vm.listForm.name.$dirty && vm.listForm.name.$valid" type="submit">Add</button>
+</form>
