@@ -1,6 +1,6 @@
 angular.module('bucketlist',['ngRoute']).config(config);
 
-function config($routeProvider){
+function config($routeProvider,$locationProvider){
 	$routeProvider.
 		when('/:usrid', {
 			templateUrl: 'angular-app/dash/dash.html',
@@ -12,4 +12,6 @@ function config($routeProvider){
 			controller: LoginController,
 			controllerAs: 'vm'
 		});
+
+	$locationProvider.html5Mode(true);
 }
