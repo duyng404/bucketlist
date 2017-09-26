@@ -36,7 +36,9 @@ router.
 
 router.
 	route('/:usrid/lists/:listid/entries/:entryid').
-	get(ctrlEntry.entryGetOne)
+	get(ctrlEntry.entryGetOne).
+	put(ctrlEntry.entryUpdateOne).
+	delete(ctrlEntry.entryDeleteOne);
 
 // debug routes
 router.
