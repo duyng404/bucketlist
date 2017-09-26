@@ -119,7 +119,7 @@ module.exports.listGetOne = function(req,res){
 }
 
 var _addList = function(req, res, user){
-	list = {
+	var list = {
 		_id : new mongoose.Types.ObjectId(),
 		name : req.body.name,
 		order : 0,

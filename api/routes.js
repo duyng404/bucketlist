@@ -3,6 +3,7 @@ var router = express.Router();
 
 ctrlUser = require('./controllers/user.controller.js');
 ctrlList = require('./controllers/list.controller.js');
+ctrlEntry = require('./controllers/entry.controller.js');
 
 // user routes
 router.
@@ -26,6 +27,16 @@ router.
 	get(ctrlList.listGetOne).
 	put(ctrlList.listUpdateOne).
 	delete(ctrlList.listDeleteOne);
+
+// entry routes
+router.
+	route('/:usrid/lists/:listid/entries').
+	get(ctrlEntry.entryGetAll).
+	post(ctrlEntry.entryAddOne);
+
+router.
+	route('/:usrid/lists/:listid/entries/:entryid').
+	get(ctrlEntry.entryGetOne)
 
 // debug routes
 router.

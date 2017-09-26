@@ -33,6 +33,7 @@ module.exports.usrGetAll = function(req,res){
 	console.log('GET all and every users');
 	User.
 		find().
+		populate('lists').
 		exec(function(err,listofuser){
 			if (err){
 				console('Error getting all the users');
